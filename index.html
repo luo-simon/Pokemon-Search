@@ -34,7 +34,7 @@
         function searchPokemon(e){
             e.preventDefault();
 
-            let pokemon = document.getElementById('pokemon').value;
+            let pokemon = (document.getElementById('pokemon').value).toLowerCase();
 
             fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
             .then((res) => res.json())
