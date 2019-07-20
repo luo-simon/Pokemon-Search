@@ -18,19 +18,61 @@
         </div>
         <input type="text" id="pokemon" class="form-control" placeholder="Rayquaza">
         <div class="input-group-append">
-            <input class="btn btn-outline-secondary" type="submit" value="~~~ Enter ~~~">
+            <input class="btn btn-outline-secondary" id="submitbtn" type="submit" value="~~~ Enter ~~~">
         </div>
     </form>
-    <div class="text-center text-capitalize mt-5" id="output"></div>
-    <footer class="fixed-bottom text-center">
-        <p>Made by Simon :)</p>
+    <div class="text-center">
+        <button class="btn btn-outline-danger" id="viewAll">View all Pokemon</button>
+    </div>
+    
+    <div class="text-center text-capitalize mt-5 container" id="output">
+        <div class="row" id="outputAll"></div>
+    </div>
+    <footer class="text-center">
+        <p><small><em>Made by Simon</em></small></p>
     </footer>
 
     
 
     <script>
         document.getElementById('searchPokemon').addEventListener('submit', searchPokemon);
+        document.getElementById('viewAll').addEventListener('click', viewAll);
+        window.addEventListener('hashchange', hashChange, false)
 
+        function hashChange(){
+            console.log("Hash change");
+            document.getElementById('pokemon').value = location.hash.substr(1); 
+            document.getElementById("submitbtn").click();
+            
+        };
+
+        function viewAll(){
+            fetch('json/pokemon.json')
+            .then((res) => res.json())
+            .then((data) =>{
+                console.log(data);
+                let output = '';
+
+                data.results.forEach(pokemon => {
+                    output += `
+                    <div class="col-md-1.5">
+                        <div class="card">
+                            <a href="#${pokemon.name}"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data.results.indexOf(pokemon)+1}.png" class="card-img-top" style="width:120px; height:120px;" alt="..."></a>
+                            <div class="card-body m-0 p-0">
+                                <p class="card-text"><small class="text-muted">#${data.results.indexOf(pokemon)+1}</small></p>
+                            </div>
+                            <div class="card-footer m-0 p-0">
+                                <a href="#${pokemon.name}"><small class="text-muted">${pokemon.name}</small></a>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                });
+                document.getElementById('outputAll').innerHTML = output;
+            })
+            .catch((err) => console.log(err));
+            
+        }
         function searchPokemon(e){
             e.preventDefault();
 
@@ -44,7 +86,8 @@
                 const stat_percent = (stat_total/720)*100;
                 let output = '';
                 output += `
-                    <h3 class="display-5 mb-4">${data.name}</h3>
+                    <div class="row" id="outputAll"></div>
+                    <h3 class="display-5 mb-4" id="${data.name}">${data.name}</h3>
                     <img src=${data.sprites.front_default} class="img-thumbnail">
                     <img src=${data.sprites.back_default} class="img-thumbnail mr-2">
                     <img src=${data.sprites.front_shiny} class="img-thumbnail ml-2">
