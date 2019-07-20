@@ -23,7 +23,7 @@
                 </div>
             </form>
             <div class="text-center">
-                <button class="btn btn-outline-light mb-4" id="viewAll">View all Pokemon</button>
+                <a href="#all"><button class="btn btn-outline-light mb-4" id="viewAll">View all Pokemon</button></a>
             </div>
         </div>
     </div>
@@ -50,12 +50,16 @@
         document.getElementById('searchPokemon').addEventListener('submit', searchPokemon);
         document.getElementById('viewAll').addEventListener('click', viewAll);
         window.addEventListener('hashchange', hashChange, false)
-
+        window.onload = hashChange();
 
         function hashChange(){
             console.log("Hash change");
-            document.getElementById('pokemon').value = location.hash.substr(1); 
-            document.getElementById("submitbtn").click();
+            if(location.hash == '#all'){
+                document.getElementById('viewAll').click();
+            } else {
+                document.getElementById('pokemon').value = location.hash.substr(1); 
+                document.getElementById("submitbtn").click();
+            }
             
         };
 
