@@ -46,8 +46,8 @@
     <div class="container text-center">
         <br>
         <hr>
-        <br>
-        <div id="evolution"></div>
+        <div id="evolution" class="mt-2"></div>
+        <div id="entry" class="mt-2"></div>
     </div>
 
     <footer class="text-center">
@@ -213,9 +213,6 @@
                 catch(err){console.log(err)}
                 finally{
                     chain = [first, second, final];
-                    console.log(`${chain}`)
-
-                    
 
                     let output = ''
                     output += `
@@ -259,6 +256,17 @@
                     `
                     document.getElementById('evolution').innerHTML = output;
                 };
+                return fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokedex.indexOf(pokemon)+1}/`)
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                const entry = data.flavor_text_entries[1].flavor_text;
+                console.log(entry);
+                document.getElementById('entry').innerHTML = `
+                    <hr><h3 class="mb-4">Pokedex Entry</h3>
+                    <p><em>${entry}</em></p><hr>
+                `
             })
             .catch((err) => console.log(err));
         }
