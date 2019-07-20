@@ -18,7 +18,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Pokemon:</span>
                 </div>
-                <input type="text" id="pokemon" class="form-control" placeholder="e.g. Gyarados">
+                <input type="text" id="pokemon" class="form-control" placeholder="e.g. Shinx">
                 <div class="input-group-append">
                     <input class="btn btn-outline-light" id="submitbtn" type="submit" value="~~~ Enter ~~~">
                 </div>
@@ -37,8 +37,7 @@
         <br>
         <hr>
         <br>
-        <h3>Evolution Chain</h3>
-        <div class="row pl-5 pr-5" id="evolution"></div>
+        <div id="evolution"></div>
     </div>
 
     <footer class="text-center">
@@ -211,6 +210,8 @@
 
                     let output = ''
                     output += `
+                        <h3>Evolution Chain</h3>
+                        <div class="row pl-5 pr-5">
                         <div class="card m-4 mx-auto col-3">
                             <a href="#${first}">
                                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedex.indexOf(first)+1}.png"
@@ -244,7 +245,7 @@
                                 <h5 class="card-title text-capitalize">${final}</h5>
                             </div>
                         </div>
-                        
+                        </div>
                         
                     `
                     // chain.forEach(element => {
