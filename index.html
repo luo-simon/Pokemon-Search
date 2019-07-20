@@ -7,6 +7,7 @@
     <title>Poke(Si)mon</title>
     <link rel="icon" href="img/favicons/favicon3.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type="text/javascript" src="pokedex.js"></script> 
 </head>
 <body style="background-color: #f4f4f4;">
     <div class="container-fluid" style="background-color: #002a72;">
@@ -31,6 +32,14 @@
         <div class="row" id="outputAll"></div>
     </div>
 
+    <div class="container text-center">
+        <br>
+        <hr>
+        <br>
+        <h3>Evolution Chain</h3>
+        <div class="row pl-5 pr-5" id="evolution"></div>
+    </div>
+
     <footer class="text-center">
         <p><small><em>Made by Simon</em></small></p>
     </footer>
@@ -41,6 +50,7 @@
         document.getElementById('searchPokemon').addEventListener('submit', searchPokemon);
         document.getElementById('viewAll').addEventListener('click', viewAll);
         window.addEventListener('hashchange', hashChange, false)
+
 
         function hashChange(){
             console.log("Hash change");
@@ -55,8 +65,9 @@
             .then((data) =>{
                 console.log(data);
                 let output = '';
-
+                let list = [];
                 data.results.forEach(pokemon => {
+                    list.push(pokemon.name);
                     output += `
                     <div class="col-md-1.5">
                         <div class="card">
@@ -72,6 +83,7 @@
                     `;
                 });
                 document.getElementById('outputAll').innerHTML = output;
+                console.log(list);
             })
             .catch((err) => console.log(err));
             
@@ -85,6 +97,7 @@
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
+                const species_url = data.species.url;
                 const stat_total = data.stats[5].base_stat+data.stats[4].base_stat+data.stats[3].base_stat+data.stats[2].base_stat+data.stats[1].base_stat+data.stats[0].base_stat;
                 const stat_percent = (stat_total/720)*100;
                 let output = '';
@@ -164,6 +177,43 @@
                     </table>
                 `
                 document.getElementById('output').innerHTML = output;
+                return fetch(species_url);
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                return fetch(data.evolution_chain.url);
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                const first = data.chain.species.name;
+                let second = ''
+                let final = ''
+                let chain = []
+                try{second = data.chain.evolves_to[0].species.name;}
+                catch(err){console.log(err)}
+                try{final = data.chain.evolves_to[0].evolves_to[0].species.name;}
+                catch(err){console.log(err)}
+                finally{
+                    chain = [first, second, final];
+                    console.log(`${chain}`)
+
+                    
+
+                    let output = ''
+                    chain.forEach(element => {
+                        output += `
+                            <div class="card m-4 mx-auto">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedex.indexOf(element)+1}.png" class="card-img-top mx-auto" style="width:120px;style="width:120px;" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title text-capitalize">${element}</h5>
+                                    <p class="card-text"><small class="text-muted"></small></p>
+                                </div>
+                            </div>
+                        `
+                    })
+                    document.getElementById('evolution').innerHTML = output;
+                };
             })
             .catch((err) => console.log(err));
         }
