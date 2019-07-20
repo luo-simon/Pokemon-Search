@@ -82,9 +82,7 @@
             .then((data) =>{
                 console.log(data);
                 let output = '';
-                let list = [];
                 data.results.forEach(pokemon => {
-                    list.push(pokemon.name);
                     output += `
                     <div class="col-md-1.5">
                         <div class="card">
@@ -100,7 +98,6 @@
                     `;
                 });
                 document.getElementById('outputAll').innerHTML = output;
-                console.log(list);
             })
             .catch((err) => console.log(err));
             
@@ -114,13 +111,79 @@
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
+                let typing = ''
+
+                data.types.forEach(type => {
+                    let color = '';
+                    switch(type.type.name){
+                        case 'normal':
+                            color = '#A8A77A';
+                            break;
+                        case 'fire':
+                            color = '#EE8130';
+                            break;
+                        case 'water':
+                            color = '#6390F0';
+                            break;
+                        case 'electric':
+                            color = '#F7D02C';
+                            break;
+                        case 'grass':
+                            color = '#7AC74C';
+                            break;
+                        case 'ice':
+                            color = '#96D9D6';
+                            break;
+                        case 'fighting':
+                            color = '#C22E28';
+                            break;
+                        case 'poison':
+                            color = '#A33EA1';
+                            break;
+                        case 'ground':
+                            color = '#E2BF65';
+                            break;
+                        case 'flying':
+                            color = '#A98FF3';
+                            break;
+                        case 'psychic':
+                            color = '#F95587';
+                            break;
+                        case 'bug':
+                            color = '#A6B91A';
+                            break;
+                        case 'rock':
+                            color = '#B6A136';
+                            break;
+                        case 'ghost':
+                            color = '#735797';
+                            break;
+                        case 'dragon':
+                            color = '#6F35FC';
+                            break;
+                        case 'dark':
+                            color = '#705746';
+                            break;
+                        case 'steel':
+                            color = '#B7B7CE';
+                            break;
+                        case 'fairy':
+                            color = '#D685AD';
+                            break;
+                    }
+                    typing += `<span class="badge mr-2 mb-4 text-light" style="background-color:${color};">${type.type.name}</span>`
+                });
+
                 const species_url = data.species.url;
                 const stat_total = data.stats[5].base_stat+data.stats[4].base_stat+data.stats[3].base_stat+data.stats[2].base_stat+data.stats[1].base_stat+data.stats[0].base_stat;
                 const stat_percent = (stat_total/720)*100;
                 let output = '';
                 output += `
                     <div class="row" id="outputAll"></div>
-                    <h3 class="display-5 mb-4" id="${data.name}">${data.name}</h3>
+                    <h3 class="display-5" id="${data.name}">${data.name}</h3>
+
+                    ${typing}<br>
+
                     <img src=${data.sprites.front_default} class="img-thumbnail" style="width:120px;">
                     <img src=${data.sprites.back_default} class="img-thumbnail mr-2" onerror="changeImg(this)" style="width:120px;">
                     <img src=${data.sprites.front_shiny} class="img-thumbnail ml-2" style="width:120px;">
@@ -207,9 +270,19 @@
                 let second = ''
                 let final = ''
                 let chain = []
-                try{second = data.chain.evolves_to[0].species.name;}
+                
+                let level1 = ''
+                let level2 = ''
+
+                try{
+                    second = data.chain.evolves_to[0].species.name;
+                    level1 = data.chain.evolves_to[0].evolution_details[0].min_level;
+                }
                 catch(err){console.log(err)}
-                try{final = data.chain.evolves_to[0].evolves_to[0].species.name;}
+                try{
+                    final = data.chain.evolves_to[0].evolves_to[0].species.name;
+                    level2 = data.chain.evolves_to[0].evolves_to[0].evolution_details[0].min_level;
+                }
                 catch(err){console.log(err)}
                 finally{
                     chain = [first, second, final];
@@ -228,7 +301,8 @@
                             </div>
                         </div>
                         <div class="card m-0 my-auto bg-transparent border-light">
-                                <i class="fas fa-random mx-auto align-middle"></i>
+                            <small>Lvl.${level1}</small>
+                            <i class="fas fa-random mx-auto align-middle"></i>
                         </div>
                         <div class="card m-4 mx-auto col-3">
                             <a href="#${second}">
@@ -240,7 +314,8 @@
                             </div>
                         </div>
                         <div class="card m-0 my-auto bg-transparent border-light">
-                                <i class="fas fa-random mx-auto align-middle"></i>
+                            <small>Lvl.${level2}</small>
+                            <i class="fas fa-random mx-auto align-middle"></i>
                         </div>
                         <div class="card m-4 mx-auto col-3">
                             <a href="#${final}">
@@ -261,8 +336,18 @@
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
-                const entry = data.flavor_text_entries[1].flavor_text;
-                console.log(entry);
+                let entry = '';
+                try{
+                    data.flavor_text_entries.forEach((element) => {
+                        if(element.language.name == "en"){
+                            entry = element.flavor_text;
+                        }
+                        if(entry != ''){
+                            throw "break";
+                        }
+                    });
+                } catch (err) {}
+
                 document.getElementById('entry').innerHTML = `
                     <hr><h3 class="mb-4">Pokedex Entry</h3>
                     <p><em>${entry}</em></p><hr>
