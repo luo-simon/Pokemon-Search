@@ -8,6 +8,7 @@
     <link rel="icon" href="img/favicons/favicon3.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script type="text/javascript" src="pokedex.js"></script> 
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 </head>
 <body style="background-color: #f4f4f4;">
     <div class="container-fluid" style="background-color: #002a72;">
@@ -209,17 +210,54 @@
                     
 
                     let output = ''
-                    chain.forEach(element => {
-                        output += `
-                            <div class="card m-4 mx-auto">
-                                <a href="#${element}"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedex.indexOf(element)+1}.png" class="card-img-top mx-auto" style="width:120px;style="width:120px;" alt="..."></a>
-                                <div class="card-body">
-                                    <h5 class="card-title text-capitalize">${element}</h5>
-                                    <p class="card-text"><small class="text-muted"></small></p>
-                                </div>
+                    output += `
+                        <div class="card m-4 mx-auto col-3">
+                            <a href="#${first}">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedex.indexOf(first)+1}.png"
+                                class="card-img-top mx-auto" style="width:120px;style="width:120px;">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-capitalize">${first}</h5>
                             </div>
-                        `
-                    })
+                        </div>
+                        <div class="card m-0 my-auto bg-transparent border-light">
+                                <i class="fas fa-random mx-auto align-middle"></i>
+                        </div>
+                        <div class="card m-4 mx-auto col-3">
+                            <a href="#${second}">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedex.indexOf(second)+1}.png"
+                                class="card-img-top mx-auto" style="width:120px;style="width:120px;">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-capitalize">${second}</h5>
+                            </div>
+                        </div>
+                        <div class="card m-0 my-auto bg-transparent border-light">
+                                <i class="fas fa-random mx-auto align-middle"></i>
+                        </div>
+                        <div class="card m-4 mx-auto col-3">
+                            <a href="#${final}">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedex.indexOf(final)+1}.png"
+                                class="card-img-top mx-auto" style="width:120px;style="width:120px;">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title text-capitalize">${final}</h5>
+                            </div>
+                        </div>
+                        
+                        
+                    `
+                    // chain.forEach(element => {
+                    //     output += `
+                    //         <div class="card m-4 mx-auto">
+                    //             <a href="#${element}"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedex.indexOf(element)+1}.png" class="card-img-top mx-auto" style="width:120px;style="width:120px;" alt="..."></a>
+                    //             <div class="card-body">
+                    //                 <h5 class="card-title text-capitalize">${element}</h5>
+                    //                 <p class="card-text"><small class="text-muted"></small></p>
+                    //             </div>
+                    //         </div>
+                    //     `
+                    //})
                     document.getElementById('evolution').innerHTML = output;
                 };
             })
