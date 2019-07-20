@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script type="text/javascript" src="pokedex.js"></script> 
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144233610-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-144233610-1');
+    </script>
+
 </head>
 <body style="background-color: #f4f4f4;">
     <div class="container-fluid" style="background-color: #002a72;">
@@ -247,17 +257,6 @@
                         </div>
                         
                     `
-                    // chain.forEach(element => {
-                    //     output += `
-                    //         <div class="card m-4 mx-auto">
-                    //             <a href="#${element}"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedex.indexOf(element)+1}.png" class="card-img-top mx-auto" style="width:120px;style="width:120px;" alt="..."></a>
-                    //             <div class="card-body">
-                    //                 <h5 class="card-title text-capitalize">${element}</h5>
-                    //                 <p class="card-text"><small class="text-muted"></small></p>
-                    //             </div>
-                    //         </div>
-                    //     `
-                    //})
                     document.getElementById('evolution').innerHTML = output;
                 };
             })
