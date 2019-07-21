@@ -51,6 +51,8 @@
         <hr>
         <div id="evolution" class="mt-2"></div>
         <div id="entry" class="mt-2"></div>
+        <div id="move_head"></div>
+        <div id="moves" class="card mt-4 bg-light rounded p-3 m-2 text-capitalize"></div>
     </div>
 
     <footer class="text-center">
@@ -66,7 +68,6 @@
         window.onload = hashChange();
 
         function hashChange(){
-            console.log("Hash change");
             window.scrollTo(0,0);
             if(location.hash == '#all'){
                 document.getElementById('viewAll').click();
@@ -106,10 +107,13 @@
             .catch((err) => console.log(err));
             
         }
+
+        let pokemon = (document.getElementById('pokemon').value).toLowerCase();
+
         function searchPokemon(e){
             e.preventDefault();
+            pokemon = (document.getElementById('pokemon').value).toLowerCase();
             
-            let pokemon = (document.getElementById('pokemon').value).toLowerCase();
             let abilities_list = [];
 
             fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
@@ -410,17 +414,227 @@
 
         function getAbilities(list){
             list.forEach(element =>{
-                console.log(element);
                 fetch(`https://pokeapi.co/api/v2/ability/${element}`)
                 .then((res) => res.json())
                 .then((data) => {
                     console.log(data);
                     let entry = data.effect_entries[0].effect;
-                    console.log(entry);
                     document.getElementById(`${element}`).innerHTML = entry;
                 })
                 .catch((err) => console.log(err));
             });
+
+            getMoves();
+
+        }
+
+        
+
+        function getMoves(){
+            let red_blue = [];
+            let yellow = [];
+
+            let gold_silver = [];
+            let crystal = [];
+
+            let ruby_sapphire = [];
+            let firered_leafgreen = [];
+            let emerald = [];
+
+            let diamond_pearl = [];
+            let platinum = [];
+            let heartgold_soulsilver = [];
+
+            let black_white = [];
+            let black2_white2 = [];
+
+            let x_y = [];
+            let omegaruby_alphasapphire = [];
+
+            let sun_moon = [];
+            let ultrasun_ultramoon = [];
+
+            fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data.moves);
+                data.moves.forEach(move => {
+                    move.version_group_details.forEach(e => {
+                        if (e.move_learn_method.name == 'level-up'){
+                            switch(e.version_group.name){
+                            case "red-blue":
+                                assignMove(e.level_learned_at, move.move.name, red_blue);
+                                break;
+                            case "yellow":
+                                assignMove(e.level_learned_at, move.move.name, yellow);
+                                break;
+                            case "gold-silver":
+                                assignMove(e.level_learned_at, move.move.name, gold_silver);
+                                break;
+                            case "crystal":
+                                assignMove(e.level_learned_at, move.move.name, crystal);
+                                break;
+                            case "ruby-sapphire":
+                                assignMove(e.level_learned_at, move.move.name, ruby_sapphire);
+                                break;
+                            case "firered-leafgreen":
+                                assignMove(e.level_learned_at, move.move.name, firered_leafgreen);
+                                break;
+                            case "emerald":
+                                assignMove(e.level_learned_at, move.move.name, emerald);
+                                break;
+                            case "diamond-pearl":
+                                assignMove(e.level_learned_at, move.move.name, diamond_pearl);
+                                break;
+                            case "platinum":
+                                assignMove(e.level_learned_at, move.move.name, platinum);
+                                break;
+                            case "heartgold-soulsilver":
+                                assignMove(e.level_learned_at, move.move.name, heartgold_soulsilver);
+                                break;
+                            case "black-white":
+                                assignMove(e.level_learned_at, move.move.name, black_white);
+                                break;
+                            case "black-2-white-2":
+                                assignMove(e.level_learned_at, move.move.name, black2_white2);
+                                break;
+                            case "x-y":
+                                assignMove(e.level_learned_at, move.move.name, x_y);
+                                break;
+                            case "omega-ruby-alpha-sapphire":
+                                assignMove(e.level_learned_at, move.move.name, omegaruby_alphasapphire);
+                                break;
+                            case "sun-moon":
+                                assignMove(e.level_learned_at, move.move.name, sun_moon);
+                                break;
+                            case "ultra-sun-ultra-moon":
+                                assignMove(e.level_learned_at, move.move.name, ultrasun_ultramoon);
+                                break;
+                            }
+                        }
+                    })
+                });
+
+                sortByLevel(red_blue);
+                sortByLevel(yellow);
+                sortByLevel(gold_silver);
+                sortByLevel(crystal);
+                sortByLevel(ruby_sapphire);
+                sortByLevel(firered_leafgreen);
+                sortByLevel(emerald);
+                sortByLevel(diamond_pearl);
+                sortByLevel(platinum);
+                sortByLevel(heartgold_soulsilver);
+                sortByLevel(black_white);
+                sortByLevel(black2_white2);
+                sortByLevel(x_y);
+                sortByLevel(omegaruby_alphasapphire);
+                sortByLevel(sun_moon);
+                sortByLevel(ultrasun_ultramoon);
+                
+                gen1 = {names: ["Gen1", "RB", "Yellow"],            lists: [red_blue, yellow]}
+                gen2 = {names: ["Gen2", "GS", "Crystal"],           lists: [gold_silver, crystal]}
+                gen3 = {names: ["Gen3", "RS", "FRLG", "Emerald"],  lists: [ruby_sapphire, firered_leafgreen, emerald]}
+                gen4 = {names: ["Gen4", "DP", "Platinum", "HGSS"], lists: [diamond_pearl, platinum, heartgold_soulsilver]}
+                gen5 = {names: ["Gen5", "BW", "B2W2"],             lists: [black_white, black2_white2]}
+                gen6 = {names: ["Gen6", "XY", "ORAS"],             lists: [x_y, omegaruby_alphasapphire]}
+                gen7 = {names: ["Gen7", "SM", "USUM"],             lists: [sun_moon, ultrasun_ultramoon]}
+
+                allGenerations = [gen1, gen2, gen3, gen4, gen5, gen6, gen7]
+
+                console.log(allGenerations);
+
+                let tables = ''
+
+                let output = ''
+
+                for (const gen of allGenerations){
+                    console.log(gen);
+                    let state = ' active'
+                    if(gen.names[0] != 'Gen1') state = ''
+
+                    output += `
+                    <li class="nav-item">
+                        <a class="nav-link${state}" data-toggle="pill" href="#${gen.names[1]}" id="${gen.names[1]}-tab" role="tab">${gen.names[0]}</a>
+                        <!--<div class="dropdown-menu">-->
+                    `
+                    
+                    let show = ' show'
+
+                    let i = 1;
+                    for (const edition of gen.lists){
+
+                        // output += `
+                        //     <a class="dropdown-item">${gen.names[i]}</a>
+                        // `
+
+                        let table_output = ''
+                        
+                        for (const move_data of edition){
+
+                            table_output += `
+                                <tr>
+                                    <td>${move_data.move_name}</td>
+                                    <td>${move_data.level}</td>
+                                    <td> ... </td>
+                                </tr>
+                            `
+                        }
+                        
+                        if(gen.names[i] != 'RB'){
+                            show = ''
+                            state = ''
+                        } 
+
+                        tables += `
+                            <div class="tab-pane fade${show}${state}" id="${gen.names[i]}" role="tabpanel">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Move name</th>
+                                            <th scope="col">Level Learned</th>
+                                            <th scope="col">Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${table_output}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `
+                        i ++;
+                    }
+
+                    output += `
+                        <!--</div>-->
+                    </li>
+                    `
+                }
+                
+                output = `
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">    
+                        ${output}
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        ${tables}
+                    </div>
+                `
+                console.log(output);
+                document.getElementById('moves').innerHTML = output;
+
+                document.getElementById('move_head').innerHTML = '<hr><h3>Moves Learned</h3>'
+
+            })
+            .catch((err) => console.log(err));
+        }
+
+        function assignMove(level, move_name, list){
+            list.push({move_name, level});
+        }
+
+        function sortByLevel(list){
+            list.sort((a,b) => (a.level < b.level) ? -1 : 1);
         }
     </script>
 </body>
